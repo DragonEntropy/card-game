@@ -1,0 +1,72 @@
+.card-header {
+    margin: auto;
+    font-weight: bold;
+}
+
+.card {
+    float: left;
+    width: 120px;
+    height: 170px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 10px;
+    /* box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2); */
+    font-family: "Arial", sans-serif;
+    position: relative;
+}
+
+.card:hover .tooltip {
+    /*transform: scale(1.1);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);*/
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: -10%;
+    /* Position above the card */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.card-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px 8px 0 0;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 10px;
+    font-weight: bold;
+}
+
+.footer-left,
+.footer-right {
+    flex: 1;
+    width: auto;
+}
+
+.footer-left {
+    text-align: left;
+}
+
+.footer-right {
+    text-align: right;
+}

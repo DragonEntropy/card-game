@@ -1,0 +1,30 @@
+{
+    "a1": {
+        "name": "Stick",
+        "tag": "attack",
+        "cost": "1",
+        "image_name": "stick.png",
+        "meta": {
+            "damage": 1
+        }
+    },
+    "d1": {
+        "name": "Bark",
+        "tag": "defense",
+        "cost": "1",
+        "image_name": "bark.png",
+        "meta": {
+            "protection": 1
+        }
+    },
+    "h2-4": {
+        "name": "Seashell",
+        "tag": "hybrid",
+        "cost": "3",
+        "image_name": "shell.png",
+        "meta": {
+            "damage": 2,
+            "protection": 4
+        }
+    }
+}
