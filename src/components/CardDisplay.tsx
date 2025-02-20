@@ -1,10 +1,9 @@
 import { useState } from "react";
 import './CardDisplay.css';
-import createCardData from "../scripts/ManageCards";
 import Card, { AttackCard, DefenseCard, HybridCard } from "../classes/Card";
 
-interface CardProp {
-    id?: string
+interface cardProp {
+    card: Card
 }
 
 function renderAttack(card: Card) {
@@ -25,20 +24,18 @@ function renderDefense(card: Card) {
     return ""
 }
 
-export default function CardDisplay({ id = "a1" }: CardProp) {
-    const data = createCardData(id);
+export default function CardDisplay({ card }: cardProp) {
     var [hover, setHover] = useState(false);
-    console.log(data.imagePath)
 
     return <>
         <div className="card">
-            <div className="card-header">{data.name}</div>
-            <img src={data.imagePath} alt={data.imagePath} className="card-image" />
+            <div className="card-header">{card.name}</div>
+            <img src={card.imagePath} alt={card.imagePath} className="card-image" />
             <div className="footer">
-                <div className="left-footer">{renderAttack(data)}</div>
-                <div className="right-footer">{renderDefense(data)}</div>
+                <div className="left-footer">{renderAttack(card)}</div>
+                <div className="right-footer">{renderDefense(card)}</div>
             </div>
-            <div className="tooltip">{data.description}</div>
+            <div className="tooltip">{card.description}</div>
         </div>
     </>
 }
