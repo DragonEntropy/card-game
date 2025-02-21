@@ -1,19 +1,20 @@
-import Card, { AttackCard, DefenseCard, HybridCard } from "./Card";
+import CardData, { AttackCard, DefenseCard, HybridCard } from "./CardData";
 import jsonData from "../assets/data.json"
+import Card from "./Card";
 
 var data: Record<string, Record<string, any>> = jsonData;
 
 export default class Deck {
-    private cardList: Array<Card> = [];
+    private cardList: Array<CardData> = [];
     constructor() {
         for (let id in data) {
             this.cardList.push(this.createCard(id));
         }
     }
 
-    generateCard() {
-        let index = Math.floor(this.cardList.length * Math.random());
-        return this.cardList[index];
+    generateCard(index: number) {
+        let randomIndex = Math.floor(this.cardList.length * Math.random());
+        return new Card(this.cardList[randomIndex], index);
     }
 
     createCard(id: string) {
@@ -29,7 +30,7 @@ export default class Deck {
                 return new HybridCard(data[id]);
             
             default:
-                return new Card(data[id]);
+                return new CardData(data[id]);
         }
     }
 }

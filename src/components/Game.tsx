@@ -1,20 +1,21 @@
 import Deck from "../classes/Deck.ts"
 import Player from "../classes/Player";
-import CardDisplay from "./CardDisplay.tsx";
+import Hand from "./Hand.tsx";
+import "../components/Hand.css"
+import PlayerHeader from "./PlayerHeader.tsx";
 
 const playerCount = 4;
 const startingHandSize = 7;
 
 function DisplayHand(player: Player) {
-    return <div>
-        {player.getHand().map((card) => (
-            <CardDisplay card={card}></CardDisplay>
-        ))}
+    return <div key={player.id}>
+        <PlayerHeader player={player}></PlayerHeader>
+        <Hand player={player}></Hand>
     </div>
 }
 
 function DisplayGame(playerList: Array<Player>) {
-    return <div>
+    return <div className="hand-container">
         {playerList.map(
             (player) => (DisplayHand(player))
         )}
@@ -26,9 +27,9 @@ export default function Game() {
     const playerList = Array<Player>(playerCount);
 
     for (let i = 0; i < playerCount; i++) {
-        let player = new Player(i, `Player ${i + 1}`);
+        let player = new Player(i, `Player ${i + 1}`, deck);
         for (let i = 0; i < startingHandSize; i++) {
-            player.draw(deck);
+            player.draw();
         }
         playerList.push(player);
     }

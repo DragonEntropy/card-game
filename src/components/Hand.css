@@ -1,0 +1,9 @@
+.hands-container {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.hand {
+    display: flex;
+}

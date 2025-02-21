@@ -5,19 +5,19 @@
 
 .card {
     float: left;
-    width: 120px;
-    height: 170px;
+    width: 100px;
+    height: 130px;
     background-color: white;
     border: 2px solid black;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10px;
+    padding: 5px;
     margin: 10px;
-    /* box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2); */
     font-family: "Arial", sans-serif;
     position: relative;
+    
 }
 
 .card:hover .tooltip {
@@ -45,7 +45,8 @@
 }
 
 .card-image {
-    width: 100%;
+    margin: auto;
+    width: 80%;
     height: auto;
     border-radius: 8px 8px 0 0;
 }

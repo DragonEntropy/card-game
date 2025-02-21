@@ -1,0 +1,43 @@
+1. Fundamentals
+x Load card data
+x Render cards
+x Render hands
+x Render player data
+
+2. Base Game engine
+x Draw and use cards
+- Select first card
+- Select multiple cards
+- Select card target
+- Attack
+- Defend
+- Confirm cards played
+- Update player info
+
+3. Extra features
+- Status cards
+- Defend status cards
+- Gods
+- Element system
+- Spell system
+
+4. Game design
+- Mass card design
+- God design
+
+5. Finishing base game
+- Game over
+- Title screen and start game option
+- Join game options
+
+6. Client and server side
+- Lobby creation
+- Client bs
+- Server bs
+
+7. Extra
+- Custom deck building
+- Card gallery
+- Improved UI design
+- Animations
+- Dynamic card draw probabilities
