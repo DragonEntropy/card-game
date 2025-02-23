@@ -1,4 +1,4 @@
-import CardData, { AttackCard, DefenseCard, HybridCard } from "./CardData";
+import CardData from "./CardData";
 import jsonData from "../assets/data.json"
 import Card from "./Card";
 
@@ -18,19 +18,6 @@ export default class Deck {
     }
 
     createCard(id: string) {
-        let tag = data[id]["tag"];
-        switch (tag) {
-            case "attack":
-                return new AttackCard(data[id]);
-
-            case "defense":
-                return new DefenseCard(data[id]);
-
-            case "hybrid":
-                return new HybridCard(data[id]);
-            
-            default:
-                return new CardData(data[id]);
-        }
+        return new CardData(data[id]);
     }
 }

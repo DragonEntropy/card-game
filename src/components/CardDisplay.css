@@ -3,7 +3,7 @@
     font-weight: bold;
 }
 
-.card {
+.card, .card-clicked {
     float: left;
     width: 100px;
     height: 130px;
@@ -16,15 +16,23 @@
     padding: 5px;
     margin: 10px;
     font-family: "Arial", sans-serif;
-    position: relative;
-    
+    position: relative;   
 }
 
-.card:hover .tooltip {
+.card-clicked {
+    opacity: 0.5;
+}
+
+.card:hover, .card-clicked:hover .tooltip {
     /*transform: scale(1.1);
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);*/
     visibility: visible;
     opacity: 1;
+}
+
+.card-queue-container {
+    float: right;
+    width: 40%;
 }
 
 .tooltip {

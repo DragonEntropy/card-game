@@ -19,7 +19,6 @@ export default class Player {
 
     draw() {
         this.hand.push(this.deck.generateCard(this.hand.length));
-        console.log(this.hand.length);
     }
 
     getHand(): ReadonlyArray<Card> {

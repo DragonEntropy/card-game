@@ -1,6 +1,6 @@
 .hands-container {
-    display: flex;
-    flex-direction: column;
+    float: left;
+    width: 60%;
 }
 
 

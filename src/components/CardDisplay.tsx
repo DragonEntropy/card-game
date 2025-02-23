@@ -1,44 +1,54 @@
 import './CardDisplay.css';
-import CardData, { AttackCard, DefenseCard, HybridCard } from "../classes/CardData";
 import Player from "../classes/Player";
 import Card from '../classes/Card';
 import { useUpdateStore } from '../store';
+import CardData from '../classes/CardData';
+import GameData from '../classes/GameData';
 
 interface cardProp {
     card: Card;
-    player: Player;
+    gameData: GameData;
+    inHand?: boolean;
 }
 
 function renderAttack(card: CardData) {
-    if (card.getTag() === "attack") {
-        return (card as AttackCard).attack
-    } else if (card.getTag() === "hybrid") {
-        return (card as HybridCard).attack
+    if (card.tags.includes("attack")) {
+        return (card.meta["stackable"] ? "+" : "") + card.meta["damage"];
     }
-    return ""
+    return "";
 }
 
 function renderDefense(card: CardData) {
-    if (card.getTag() === "defense") {
-        return (card as DefenseCard).defense
-    } else if (card.getTag() === "hybrid") {
-        return (card as HybridCard).defense
+    if (card.tags.includes("defense")) {
+        return card.meta["protection"];
     }
-    return ""
+    return "";
 }
 
-function onCardClick(card: Card, player: Player) {
+function onConfirmClick(card: Card, player: Player) {
     let success = player.playCardFromHand(card.getHandIndex());
     if (success) {
         player.draw();
     }
 }
 
-export default function CardDisplay({ card, player }: cardProp) {
+function onCardClick(card: Card, gameData: GameData) {
+    let success = gameData.selectCard(card);
+    if (success) {
+        console.log("Success!!!");
+    }
+    console.log(gameData.selectedCards);
+}
+
+function cardInUse(card: Card, gameData: GameData, inHand: boolean) {
+    return gameData.selectedCards.find((c) => (c.id == card.id)) && inHand;
+}
+
+export default function CardDisplay({ card, gameData, inHand = true }: cardProp) {
     const { state, setState } = useUpdateStore();
     return <>
-        <div className="card" onClick={() => {
-            onCardClick(card, player);
+        <div className={cardInUse(card, gameData, inHand)  ? "card-clicked" : "card"} onClick={() => {
+            onCardClick(card, gameData);
             setState(true);
         }}>
             <div className="card-header">{card.data.name}</div>

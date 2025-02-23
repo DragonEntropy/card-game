@@ -1,16 +1,17 @@
 {
     "a1": {
         "name": "Stick",
-        "tag": "attack",
+        "tags": ["attack"],
         "cost": "1",
         "image_name": "stick.png",
         "meta": {
-            "damage": 1
+            "damage": 1,
+            "stackable": false
         }
     },
     "d1": {
         "name": "Bark",
-        "tag": "defense",
+        "tags": ["defense"],
         "cost": "1",
         "image_name": "bark.png",
         "meta": {
@@ -19,12 +20,22 @@
     },
     "h2-4": {
         "name": "Seashell",
-        "tag": "hybrid",
+        "tags": ["attack", "defense"],
         "cost": "3",
         "image_name": "shell.png",
         "meta": {
             "damage": 2,
             "protection": 4
+        }
+    },
+    "ae3": {
+        "name": "Flint",
+        "tags": ["attack"],
+        "cost": "2",
+        "image_name": "flint.png",
+        "meta": {
+            "damage": 2,
+            "stackable": true
         }
     }
 }
