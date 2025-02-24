@@ -30,7 +30,6 @@ export default class Player {
     }
 
     playCardFromHand(index: number) {
-        console.log(index, this.hand.length);
         if (index >= this.hand.length) {
             return false;
         }
@@ -40,5 +39,9 @@ export default class Player {
             card.updateHandIndex(i);
         })
         return true;
+    }
+
+    alterHealth(deltaHealth: number) {
+        this.health += deltaHealth
     }
 }

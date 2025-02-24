@@ -1,5 +1,5 @@
 import Player from "../classes/Player"
-import { useTargetStore } from "../store"
+import { useTargetStore, useUpdateStore } from "../store"
 import "./PlayerHeader.css"
 
 interface PlayerHeaderProp {
@@ -7,6 +7,7 @@ interface PlayerHeaderProp {
 }
 
 export default function PlayerHeader({ player }: PlayerHeaderProp) {
+    useUpdateStore();
     let [health, mana, money] = player.getStats()
     return <div className="player-header">
         <PlayerNameplate player={player}></PlayerNameplate>

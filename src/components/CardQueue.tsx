@@ -11,8 +11,7 @@ export interface gameDataProp {
 export default function CardQueue({ gameData }: gameDataProp) {
     useUpdateStore();
     let { targetPlayer, setTargetPlayer } = useTargetStore();
-    let activePlayer = gameData.playerList[gameData.playerActionIndex];
-    console.log(gameData.playerList.length);
+    let activePlayer = gameData.playerList[gameData.playerCurrentIndex > -1 ? gameData.playerCurrentIndex : gameData.playerActionIndex];
 
     return <div>
         {(targetPlayer.id >= 0)

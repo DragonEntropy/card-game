@@ -25,19 +25,8 @@ function renderDefense(card: CardData) {
     return "";
 }
 
-function onConfirmClick(card: Card, player: Player) {
-    let success = player.playCardFromHand(card.getHandIndex());
-    if (success) {
-        player.draw();
-    }
-}
-
 function onCardClick(card: Card, gameData: GameData) {
-    let success = gameData.selectCard(card);
-    if (success) {
-        console.log("Success!!!");
-    }
-    console.log(gameData.selectedCards);
+    gameData.selectCard(card);
 }
 
 function cardInUse(card: Card, gameData: GameData, inHand: boolean) {
@@ -47,7 +36,7 @@ function cardInUse(card: Card, gameData: GameData, inHand: boolean) {
 export default function CardDisplay({ card, gameData, inHand = true }: cardProp) {
     const { state, setState } = useUpdateStore();
     return <>
-        <div className={cardInUse(card, gameData, inHand)  ? "card-clicked" : "card"} onClick={() => {
+        <div className={cardInUse(card, gameData, inHand) ? "card-clicked" : "card"} onClick={() => {
             onCardClick(card, gameData);
             setState(true);
         }}>

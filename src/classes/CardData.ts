@@ -24,7 +24,6 @@ export default class CardData {
         this.imagePath = imageDir + data["image_name"];
         this.meta = data["meta"];
         this.tags = data["tags"];
-        console.log(this.tags);
 
         for (let tag of (this.tags)) {
             let component = this.componentMap[tag];
