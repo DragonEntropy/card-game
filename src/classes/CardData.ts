@@ -1,4 +1,4 @@
-import { ComponentInput, useAttackComponent, useDefenseComponent } from "./CardComponent";
+import { ComponentInput, useAttackComponent, useCureComponent, useDefenseComponent, useHealComponent, useManaComponent, useOnDamageComponent } from "./CardComponent";
 
 const imageDir = "../assets/images/cards/"
 
@@ -8,12 +8,19 @@ export default class CardData {
     public readonly description: string;
     public readonly imagePath: string;
     public readonly meta: Record<string, any>;
-    public readonly components: Array<(inputs: ComponentInput) => (boolean)> = [];
+    public readonly baseComponents: Array<(inputs: ComponentInput) => (boolean)> = [];
+    public readonly additionalComponents: Array<(inputs: ComponentInput) => (boolean)> = [];
     public readonly tags: Array<string>;
 
-    private componentMap : Record<string, (inputs: ComponentInput) => (boolean)> = {
+    private static baseComponentMap : Record<string, (inputs: ComponentInput) => (boolean)> = {
         "attack": useAttackComponent,
         "defense": useDefenseComponent
+    };
+    private static additionalComponentMap : Record<string, (inputs: ComponentInput) => (boolean)> = {
+        "heal": useHealComponent,
+        "mana": useManaComponent,
+        "cure": useCureComponent,
+        "onDamage": useOnDamageComponent
     }
     
 
@@ -26,9 +33,14 @@ export default class CardData {
         this.tags = data["tags"];
 
         for (let tag of (this.tags)) {
-            let component = this.componentMap[tag];
+            let component = CardData.baseComponentMap[tag];
             if (component) {
-                this.components.push(component);
+                this.baseComponents.push(component);
+            }
+
+            component = CardData.additionalComponentMap[tag];
+            if (component) {
+                this.additionalComponents.push(component);
             }
         }
     }

@@ -8,11 +8,15 @@ export default class GameData {
     public playerList: Array<Player>;
     public playerActionIndex: number = 0;
     public playerCurrentIndex: number = 0;
+    public playerDefenseIndex: number = 0;
     public turnIndex: number = 0;
     public subTurnIndex: number = 0;
+    public damageDealt: number = 0;
 
     public oldSelectedCards: Array<Card> = [];
     public selectedCards: Array<Card> = [];
+
+    public static readonly cold_levels = [0, -1, -2, -5, 5, -100]
 
     constructor(playerList: Array<Player>) {
         this.playerList = playerList;
@@ -24,7 +28,8 @@ export default class GameData {
 
     selectCard(card: Card) {
         // Check that card is from the correct player's hand
-        if (this.playerList[this.playerCurrentIndex].getHand().findIndex((playerCard: Card) => (playerCard.id == card.id)) == -1) {
+        let player = this.playerList[this.playerCurrentIndex]
+        if (player.getHand().findIndex((playerCard: Card) => (playerCard.id == card.id)) == -1) {
             return false;
         }
 
@@ -42,21 +47,37 @@ export default class GameData {
                 console.log("Failure: Cannot play non-defense card in defense phase");
                 return false;
             }
+            else if (this.selectedCards.length > 0 && player.effects.dazed) {
+                console.log("Failure: Player is dazed");
+                return false;
+            }
         }
 
         else {
-            // Only allow attack in attack phase
-            if (!(card.data.tags.includes("attack"))) {
+            // Only allow non-defense in attack phase
+            let tagFound = false;
+            for (let tag of card.data.tags) {
+                if (tag !== "defense") {
+                    tagFound = true;
+                            
+                    // Only allow stackable attacks on top of existing attacks, otherwise clear hand
+                    if (this.selectedCards.length > 0) {
+                        if ( !meta["stackable"] ) {
+                            this.selectedCards = [];
+                            console.log("Clearing hand: Cannot play non-stackable attack card ontop of a stackable attack");
+                        }
+                    }
+                    break;
+                }
+            }
+            
+            console.log(tagFound);
+            if (!tagFound) {
                 console.log("Failure: Cannot play non-attack card in action phase");
                 return false;
             }
-
-            // Only allow stackable attacks on top of existing attacks, otherwise clear hand
-            if (!meta["stackable"] && this.selectedCards.length > 0) {
-                this.selectedCards = [];
-                console.log("Clearing hand: Cannot play non-stackable attack card ontop of a stackable attack");
-            }
         }
+
 
         this.selectedCards.push(card);
         return true;
@@ -92,6 +113,49 @@ export default class GameData {
         }
     }
 
+    applyAdditionalComponents(cardArray: Array<Card>) {
+        for (let card of cardArray) {
+            for (let component of card.data.additionalComponents) {
+                component({ card: card.data, gameData: this });
+            }
+        }
+    }
+
+    endOfTurn() {
+        this.subTurnIndex = 0;
+        let player = this.playerList[this.playerActionIndex];
+        
+        let coldLevel = player.effects["cold_level"];
+        if (coldLevel) {
+            if (Math.random() <= 0.05) {
+                player.effects["cold_level"]++;
+            }
+        }
+
+        player.alterHealth(GameData.cold_levels[coldLevel]);
+
+        this.turnIndex++;
+        this.playCards();
+        this.nextPlayer();
+        this.oldSelectedCards = [];
+        this.selectedCards = [];
+        return true;
+    }
+
+    checkDefensePhase() {
+        if (this.proposedDamage > 0) {
+            return true;
+        }
+
+        for (let card of this.selectedCards) {
+            if (card.data.additionalComponents.length > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     commitActions(targetPlayer: Player, setTargetPlayer: (player: Player) => void) {
 
         // Check player is attacking another player
@@ -99,32 +163,35 @@ export default class GameData {
             console.log("No player selected");
             return false;
         }
+        this.playerDefenseIndex = this.playerList.findIndex((player) => (player.id == targetPlayer.id));
     
-        // Apply components of all cards
+        // Predict damage of all cards
         this.proposedDamage = 0;
         this.proposedBlock = 0;
         for (let card of this.selectedCards) {
-            for (let component of card.data.components) {
+            for (let component of card.data.baseComponents) {
                 component({ card: card.data, gameData: this });
             }
         }
 
         // First resolve incoming damage
-        let netDamage = this.incomingDamage - this.proposedBlock
+        this.damageDealt = Math.max(this.incomingDamage - this.proposedBlock, 0)
         let attackId = this.playerCurrentIndex;
-        let defendId = this.playerList.findIndex((player) => (player.id == targetPlayer.id));
-        if (netDamage > 0) {
-            this.playerList[attackId].alterHealth(-netDamage);
-            console.log(`${this.playerList[attackId].name} has taken ${netDamage} damage!`);
+        let defendId = this.playerDefenseIndex;
+        if (this.damageDealt > 0) {
+            this.playerList[attackId].alterHealth(-this.damageDealt);
+            console.log(`${this.playerList[attackId].name} has taken ${this.damageDealt} damage!`);
         }
         this.incomingDamage = this.proposedDamage;
 
         if (this.incomingDamage) {
             console.log(`${this.playerList[attackId].name} threatens ${this.playerList[defendId].name} with ${this.incomingDamage} damage`);
         }
+        this.applyAdditionalComponents(this.oldSelectedCards);
 
-        // Force player to defend if damage is proposed
-        if (this.proposedDamage > 0) {
+        // Force player to defend if damage is proposed or an effect is proposed
+        let isDefenseRequired = this.checkDefensePhase();
+        if (isDefenseRequired) {
             if (attackId !== defendId) {
                 console.log(`${targetPlayer.name} is now defending against ${this.incomingDamage} damage!`);
                 this.subTurnIndex++;
@@ -141,18 +208,15 @@ export default class GameData {
                 if (this.incomingDamage > 0) {    
                     this.playerList[attackId].alterHealth(-this.incomingDamage);
                     console.log(`${this.playerList[attackId].name} has taken ${this.incomingDamage} damage!`);
+                    this.damageDealt = this.incomingDamage;
                 }
+
+                this.applyAdditionalComponents(this.selectedCards);
             }
         }
 
 
         // Otherwise go next player
-        this.subTurnIndex = 0;
-        this.turnIndex++;
-        this.playCards();
-        this.nextPlayer();
-        this.oldSelectedCards = [];
-        this.selectedCards = [];
-        return true;
+        this.endOfTurn();
     }
 }

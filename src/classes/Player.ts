@@ -1,6 +1,14 @@
 import Card from "./Card";
 import Deck from "./Deck";
 
+export interface Effects {
+    cold_level: number,
+    fog: number,
+    dazed: number,
+    dream: number,
+    darkness: number
+}
+
 export default class Player {
     public readonly id: number;
     public readonly name: string;
@@ -10,6 +18,13 @@ export default class Player {
     protected health = 40;
     protected mana = 10;
     protected money = 20;
+    public effects : Effects = {
+        cold_level: 0, 
+        fog: 0,
+        dazed: 0,
+        dream: 0,
+        darkness: 0
+    };
 
     constructor(id: number, name: string, deck: Deck) {
         this.id = id;
@@ -42,6 +57,10 @@ export default class Player {
     }
 
     alterHealth(deltaHealth: number) {
-        this.health += deltaHealth
+        this.health = Math.min(99, this.health + deltaHealth);
+    }
+
+    alterMana(deltaMana: number) {
+        this.mana += deltaMana;
     }
 }

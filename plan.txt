@@ -6,13 +6,13 @@ x Render player data
 
 2. Base Game engine
 x Draw and use cards
-- Select first card
-- Select multiple cards
-- Select card target
-- Attack
-- Defend
-- Confirm cards played
-- Update player info
+x Select first card
+x Select multiple cards
+x Select card target
+x Attack
+x Defend
+x Confirm cards played
+x Update player info
 
 3. Extra features
 - Status cards

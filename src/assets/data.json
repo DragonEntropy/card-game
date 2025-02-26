@@ -28,7 +28,7 @@
             "protection": 4
         }
     },
-    "ae3": {
+    "ae2": {
         "name": "Flint",
         "tags": ["attack"],
         "cost": "2",
@@ -36,6 +36,47 @@
         "meta": {
             "damage": 2,
             "stackable": true
+        }
+    },
+    "h5": {
+        "name": "Health potion",
+        "tags": ["heal"],
+        "cost": "1",
+        "image_name": "potion.png",
+        "description": "Restores 5 health to the target",
+        "meta": {
+            "healing": 5
+        }
+    },
+    "m5": {
+        "name": "Mana potion",
+        "tags": ["mana"],
+        "cost": "1",
+        "image_name": "mana_potion.png",
+        "description": "Restores 5 mana to the target",
+        "meta": {
+            "mana": 5
+        }
+    },
+    "i1": {
+        "name": "Snowball",
+        "tags": ["attack", "onDamage"],
+        "cost": "3",
+        "image_name": "snow_ball.jpg",
+        "description": "Applies cold to the target on damage",
+        "meta": {
+            "damage": 1,
+            "onDamage": "cold"
+        }
+    },
+    "sc": {
+        "name": "Bezoar",
+        "tags": ["cure"],
+        "cost": 5,
+        "image_name": "bezoar.jpg",
+        "description": "Cures cold, fever, fog and dazed from the target",
+        "meta": {
+            "cure_levels": [2, 1, 1, 1, 0, 0]
         }
     }
 }
